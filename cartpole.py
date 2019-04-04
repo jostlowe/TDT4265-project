@@ -1,8 +1,9 @@
-import gym, time, random
+import gym, random
 from collections import deque, namedtuple
 
 from keras import  models, layers, optimizers
 import numpy as np
+import time as timer
 
 
 
@@ -66,32 +67,33 @@ class DQNAgent:
             self.epsilon *= self.epsilon_decay
 
 
+if __name__ == "__main__":
+    cartpole = gym.make('CartPole-v0')
+    num_states = cartpole.observation_space.shape[0]
+    num_actions = cartpole.action_space.n
+    max_episodes = 1000
+
+    agent = DQNAgent(num_states=num_states, num_actions=num_actions)
+    prev_scores = deque([], 20)
+
+    for e in range(max_episodes):
+        state = cartpole.reset()
+        state = np.reshape(state, [1, 4])
+
+        for time in range(500):
+            action = agent.act(state)
+            next_state, reward, done, _ = cartpole.step(action)
+            next_state = np.reshape(next_state, [1, 4])
+            agent.remember((state, action, reward, next_state, done))
+            state = next_state
+            if done:
+                print("episode: %i/%i, score = %i" % (e, max_episodes, time), end=' \t')
+                break
+        agent.replay(32)
+        prev_scores.append(time)
+        print("avg:", np.mean(list(prev_scores)).round(1))
 
 
-cartpole = gym.make('CartPole-v0')
-num_states = cartpole.observation_space.shape[0]
-num_actions = cartpole.action_space.n
-max_episodes = 1000
-
-agent = DQNAgent(num_states=num_states, num_actions=num_actions)
-prev_scores = deque([], 20)
-
-for e in range(max_episodes):
-    state = cartpole.reset()
-    state = np.reshape(state, [1, 4])
-
-    for time in range(500):
-        action = agent.act(state)
-        next_state, reward, done, _ = cartpole.step(action)
-        next_state = np.reshape(next_state, [1, 4])
-        agent.remember((state, action, reward, next_state, done))
-        state = next_state
-        if done:
-            print("episode: %i/%i, score = %i" % (e, max_episodes, time), end=' \t')
-            break
-    agent.replay(32)
-    prev_scores.append(time)
-    print("avg:", np.mean(list(prev_scores)).round(1))
+    agent.model.save('cartpole.h5')
 
 
-agent.model.save('cartpole.h5')
