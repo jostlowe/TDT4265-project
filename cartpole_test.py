@@ -8,6 +8,7 @@ import numpy as np
 cartpole = gym.make('CartPole-v0')
 num_states = cartpole.observation_space.shape[0]
 num_actions = cartpole.action_space.n
+#cartpole = gym.wrappers.Monitor(cartpole, './video/', force=True)
 
 agent = DQNAgent(num_states, num_actions)
 agent.model = models.load_model('cartpole.h5')
