@@ -5,6 +5,7 @@ from keras import  models, layers, optimizers
 import numpy as np
 import time as timer
 
+import matplotlib.pyplot as plt
 
 
 class ReplayMemory:
@@ -29,7 +30,7 @@ class DQNAgent:
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
         self.epsilon_decay = 0.995
-        self.learning_rate = 0.001
+        self.learning_rate = 0.0001
         self.model = self._make_model()
 
 
@@ -53,7 +54,7 @@ class DQNAgent:
             # returns action with highest q-value
             return np.argmax(prediction[0])
 
-    def replay(self, batch_size):
+    def replay(self, batch_size, episode):
         batch = self.memory.sample(batch_size)
         for state, action, reward, next_state, done in batch:
             if done:
@@ -63,7 +64,7 @@ class DQNAgent:
             target_f = self.model.predict(state)
             target_f[0][action] = target
             self.model.fit(state, target_f, epochs=1, verbose=0)
-        if self.epsilon > self.epsilon_min:
+        if (self.epsilon > self.epsilon_min) and (episode > 1000):
             self.epsilon *= self.epsilon_decay
 
 
@@ -71,29 +72,39 @@ if __name__ == "__main__":
     cartpole = gym.make('CartPole-v0')
     num_states = cartpole.observation_space.shape[0]
     num_actions = cartpole.action_space.n
-    max_episodes = 1000
+    max_episodes = 10000
 
     agent = DQNAgent(num_states=num_states, num_actions=num_actions)
-    prev_scores = deque([], 20)
+    prev_scores = deque([], 200)
+    scores = []
+    averages = []
 
     for e in range(max_episodes):
         state = cartpole.reset()
         state = np.reshape(state, [1, 4])
-
+        score = 0
         for time in range(500):
             action = agent.act(state)
             next_state, reward, done, _ = cartpole.step(action)
+            cart_position = state[0][0]
+            cart_speed    = state[0][1]
+            pole_pos      = state[0][2]
+            pole_speed    = state[0][3]
+            reward -= 0.1*abs(cart_position) + 0.01*abs(cart_speed) + 0.005*abs(pole_pos)
+            score += reward
             next_state = np.reshape(next_state, [1, 4])
             agent.remember((state, action, reward, next_state, done))
             state = next_state
             if done:
-                print("episode: %i/%i, score = %i" % (e, max_episodes, time), end=' \t')
+                print("episode: %i/%i, score = %f" % (e, max_episodes, score), end=' \t')
                 break
-        agent.replay(32)
-        prev_scores.append(time)
-        print("avg:", np.mean(list(prev_scores)).round(1))
+        agent.replay(32, e)
+        prev_scores.append(score)
+        scores.append(score)
+        average = np.mean(list(prev_scores)).round(1)
+        averages.append(average)
+        print("avg:", average)
 
-
+    plt.plot(scores, 'r', averages, 'b')
+    plt.show()
     agent.model.save('cartpole.h5')
-
-
