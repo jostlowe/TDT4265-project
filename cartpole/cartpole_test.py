@@ -1,6 +1,6 @@
 import gym, time
 
-from keras import models, layers, optimizers
+from keras import models
 from cartpole import DQNAgent
 
 import numpy as np
