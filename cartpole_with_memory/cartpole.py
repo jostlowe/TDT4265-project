@@ -121,7 +121,7 @@ if __name__ == "__main__":
 
             frame_memory.remember(next_state)
             score += reward
-            agent.remember((prev_frame_memory, action, reward, frame_memory, done))
+            agent.remember((prev_frame_memory, action, reward, deepcopy(frame_memory), done))
             if done:
                 print("episode: %i/%i, score = %f e=%f" % (episode, MAX_EPISODES, score, agent.epsilon), end=' \t')
                 break
