@@ -7,6 +7,7 @@ import time as timer
 
 import matplotlib.pyplot as plt
 
+MAX_EPISODES = 10000
 
 class ReplayMemory:
     def __init__(self, capacity):
@@ -29,8 +30,8 @@ class DQNAgent:
         self.gamma = 0.95    # discount rate
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
-        self.epsilon_decay = 0.995
-        self.learning_rate = 0.0001
+        self.epsilon_decay = 1-5/MAX_EPISODES
+        self.learning_rate = 1/MAX_EPISODES
         self.model = self._make_model()
 
 
@@ -38,6 +39,8 @@ class DQNAgent:
         model = models.Sequential()
         model.add(layers.Dense(24, input_dim=self.num_states, activation='relu'))
         model.add(layers.Dense(24, activation='relu'))
+        model.add(layers.Dense(24, activation='relu')) #Added extra
+        model.add(layers.Dense(24, activation='relu')) #Added extra #2
         model.add(layers.Dense(self.num_actions, activation='linear'))
         model.compile(loss='mse', optimizer=optimizers.Adam(lr=self.learning_rate))
         return model
@@ -64,7 +67,7 @@ class DQNAgent:
             target_f = self.model.predict(state)
             target_f[0][action] = target
             self.model.fit(state, target_f, epochs=1, verbose=0)
-        if (self.epsilon > self.epsilon_min) and (episode > 1000):
+        if (self.epsilon > self.epsilon_min) and (episode > MAX_EPISODES//10):
             self.epsilon *= self.epsilon_decay
 
 
@@ -72,33 +75,32 @@ if __name__ == "__main__":
     cartpole = gym.make('CartPole-v0')
     num_states = cartpole.observation_space.shape[0]
     num_actions = cartpole.action_space.n
-    max_episodes = 10000
 
     agent = DQNAgent(num_states=num_states, num_actions=num_actions)
-    prev_scores = deque([], 200)
+    prev_scores = deque([], MAX_EPISODES//50)
     scores = []
     averages = []
 
-    for e in range(max_episodes):
+    for episode in range(MAX_EPISODES):
         state = cartpole.reset()
         state = np.reshape(state, [1, 4])
         score = 0
         for time in range(500):
             action = agent.act(state)
             next_state, reward, done, _ = cartpole.step(action)
-            cart_position = state[0][0]
-            cart_speed    = state[0][1]
-            pole_pos      = state[0][2]
-            pole_speed    = state[0][3]
-            reward -= 0.1*abs(cart_position) + 0.01*abs(cart_speed) + 0.005*abs(pole_pos)
+            cart_position = next_state[0]
+            cart_speed    = next_state[1]
+            pole_pos      = next_state[2]
+            pole_speed    = next_state[3]
+            reward -= abs(cart_position) + 0.01*abs(cart_speed) + 0.005*abs(pole_pos)
             score += reward
             next_state = np.reshape(next_state, [1, 4])
             agent.remember((state, action, reward, next_state, done))
             state = next_state
             if done:
-                print("episode: %i/%i, score = %f" % (e, max_episodes, score), end=' \t')
+                print("episode: %i/%i, e = %f, score = %f" % (episode, MAX_EPISODES, agent.epsilon, score), end=' \t')
                 break
-        agent.replay(32, e)
+        agent.replay(32, episode)
         prev_scores.append(score)
         scores.append(score)
         average = np.mean(list(prev_scores)).round(1)
