@@ -116,7 +116,7 @@ if __name__ == "__main__":
             if done:
                 break
         slope = calculate_slope(prev_scores)
-        print("episode: %i/%i -> %i,\t slope: %f, epsilon: %f" % (episode, MAX_EPISODES, score, slope, agent.epsilon))
+        print("episode: %i/%i -> %i  \t slope: %f\t epsilon: %f" % (episode, MAX_EPISODES, score, slope, agent.epsilon))
         with open('data.csv', 'a') as csv_file:
             csv_file.write("%i, %i, %f, %f\n" % (MAX_EPISODES, score, slope, agent.epsilon))
 

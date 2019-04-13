@@ -8,8 +8,7 @@ from copy import deepcopy
 import time as timer
 import itertools
 
-
-
+MAX_EPISODES = 2000
 
 class ReplayMemory:
     def __init__(self, capacity):
@@ -30,10 +29,10 @@ class DQNAgent:
         self.num_actions = num_actions
         self.memory = ReplayMemory(capacity=500)
         self.gamma = 0.98    # discount rate
-        self.epsilon = 0.9  # exploration rate
+        self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
-        self.epsilon_decay = 1
-        self.learning_rate = 0.001
+        self.epsilon_decay = 1-5/MAX_EPISODES
+        self.learning_rate = 1/MAX_EPISODES
         self.model = self._make_model()
 
 
@@ -58,7 +57,7 @@ class DQNAgent:
             # returns action with highest q-value
             return np.argmax(prediction)
 
-    def replay(self, batch_size):
+    def replay(self, batch_size, episode):
         batch = self.memory.sample(batch_size)
         for frame_memory, action, reward, next_frame_memory, done in batch:
             if done:
@@ -68,7 +67,7 @@ class DQNAgent:
             target_f = self.model.predict(frame_memory.fetch())
             target_f[0][action] = target
             self.model.fit(frame_memory.fetch(), target_f, epochs=1, verbose=0)
-        if self.epsilon > self.epsilon_min:
+        if (self.epsilon > self.epsilon_min) and (episode > MAX_EPISODES//10):
             self.epsilon *= self.epsilon_decay
 
 
@@ -105,10 +104,10 @@ class FrameMemory:
 
 
 if __name__ == "__main__":
-    prev_scores = deque([], 500)
-    cartpole = gym.make('BipedalWalker-v2')
-    num_states = cartpole.observation_space.shape[0]
-    num_actions = cartpole.action_space.shape[0]
+    prev_scores = deque([], MAX_EPISODES//50)
+    bipedal = gym.make('BipedalWalker-v2')
+    num_states = bipedal.observation_space.shape[0]
+    num_actions = bipedal.action_space.shape[0]
     num_frames = 10
     LOAD = True
 
@@ -117,10 +116,8 @@ if __name__ == "__main__":
     if LOAD:
         agent.model = models.load_model('bipedal.h5')
 
-    max_episodes = 2000
-
-    for e in range(max_episodes):
-        initial_state = cartpole.reset()
+    for episode in range(MAX_EPISODES):
+        initial_state = bipedal.reset()
         frame_memory.reset(initial_state)
         score = 0
 
@@ -128,23 +125,21 @@ if __name__ == "__main__":
             action_number = agent.act(frame_memory.fetch())
             action = calculate_action(action_number)
             prev_frame_memory = deepcopy(frame_memory)
-            next_state, reward, done, _ = cartpole.step(action)
+            next_state, reward, done, _ = bipedal.step(action)
             frame_memory.remember(next_state)
-            agent.remember((prev_frame_memory, action, reward, frame_memory, done))
+            agent.remember((prev_frame_memory, action, reward, deepcopy(frame_memory), done))
             score += reward
             if done:
                 break
         prev_scores.append(score)
         avg = np.average(prev_scores)
-        print("episode: %i/%i -> %i, avg: %f, epsilon: %f" % (e, max_episodes, score, avg, agent.epsilon))
+        slope = calculate_slope(prev_scores)
+        print("episode: %i/%i -> %i  \t slope: %f\t epsilon: %f" % (episode, MAX_EPISODES, score, slope, agent.epsilon))
         with open('data.csv', 'a') as csv_file:
-            csv_file.write("%i, %i, %f, %f\n" % (e, score, avg, agent.epsilon))
+            csv_file.write("%i, %i, %f, %f\n" % (episode, score, avg, agent.epsilon))
 
-        agent.replay(128)
+        agent.replay(128, episode)
 
-        if e % 100 == 0:
+        if episode % 100 == 0:
             print("checkpoint")
             agent.model.save('bipedal.h5')
-
-
-
