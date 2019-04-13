@@ -8,7 +8,7 @@ from copy import deepcopy
 import time as timer
 import itertools
 
-MAX_EPISODES = 2000
+MAX_EPISODES = 10000
 
 class ReplayMemory:
     def __init__(self, capacity):
@@ -31,8 +31,8 @@ class DQNAgent:
         self.gamma = 0.98    # discount rate
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
-        self.epsilon_decay = 1-5/MAX_EPISODES
-        self.learning_rate = 1/MAX_EPISODES
+        self.epsilon_decay = 1.0-5.0/MAX_EPISODES
+        self.learning_rate = 1.0/MAX_EPISODES
         self.model = self._make_model()
 
 
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     num_states = bipedal.observation_space.shape[0]
     num_actions = bipedal.action_space.shape[0]
     num_frames = 10
-    LOAD = True
+    LOAD = False
 
     frame_memory = FrameMemory(length=num_frames)
     agent = DQNAgent(num_states=num_states*num_frames, num_actions=81)
@@ -134,11 +134,11 @@ if __name__ == "__main__":
         prev_scores.append(score)
         avg = np.average(prev_scores)
         slope = calculate_slope(prev_scores)
-        print("episode: %i/%i -> %i  \t slope: %f\t epsilon: %f" % (episode, MAX_EPISODES, score, slope, agent.epsilon))
+        print("episode: %i/%i -> %i  \t avg: %f\t epsilon: %f" % (episode, MAX_EPISODES, score, avg, agent.epsilon))
         with open('data.csv', 'a') as csv_file:
             csv_file.write("%i, %i, %f, %f\n" % (episode, score, avg, agent.epsilon))
 
-        agent.replay(128, episode)
+        agent.replay(32, episode)
 
         if episode % 100 == 0:
             print("checkpoint")
