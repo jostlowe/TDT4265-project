@@ -6,7 +6,7 @@ import numpy as np
 from scipy.stats import linregress
 import time as timer
 
-
+MAX_EPISODES = 1000
 
 class ReplayMemory:
     def __init__(self, capacity):
@@ -29,8 +29,8 @@ class DQNAgent:
         self.gamma = 0.98    # discount rate
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
-        self.epsilon_decay = 0.999
-        self.learning_rate = 0.001
+        self.epsilon_decay = 1-5/MAX_EPISODES
+        self.learning_rate = 1/MAX_EPISODES
         self.model = self._make_model()
 
 
@@ -55,7 +55,7 @@ class DQNAgent:
             # returns action with highest q-value
             return np.argmax(prediction)
 
-    def replay(self, batch_size):
+    def replay(self, batch_size, episode):
         batch = self.memory.sample(batch_size)
         for state, action, reward, next_state, done in batch:
             if done:
@@ -65,7 +65,7 @@ class DQNAgent:
             target_f = self.model.predict(state)
             target_f[0][action] = target
             self.model.fit(state, target_f, epochs=1, verbose=0)
-        if self.epsilon > self.epsilon_min:
+        if (self.epsilon > self.epsilon_min) and (episode > MAX_EPISODES//10):
             self.epsilon *= self.epsilon_decay
 
 
@@ -93,23 +93,22 @@ def calculate_slope(scores):
 
 
 if __name__ == "__main__":
-    prev_scores = deque([0,0], 200)
-    cartpole = gym.make('BipedalWalker-v2')
-    num_states = cartpole.observation_space.shape[0]
-    num_actions = cartpole.action_space.shape[0]
-    max_episodes = 10000
+    prev_scores = deque([0,0], MAX_EPISODES//50)
+    bipedal = gym.make('BipedalWalker-v2')
+    num_states = bipedal.observation_space.shape[0]
+    num_actions = bipedal.action_space.shape[0]
 
     agent = DQNAgent(num_states=num_states, num_actions=8)
 
-    for e in range(max_episodes):
-        state = cartpole.reset()
+    for episode in range(MAX_EPISODES):
+        state = bipedal.reset()
         state = np.reshape(state, [1, num_states])
         score = 0
 
         for time in range(500):
             action_number = agent.act(state)
             action = calculate_action(action_number)
-            next_state, reward, done, _ = cartpole.step(action)
+            next_state, reward, done, _ = bipedal.step(action)
             next_state = np.reshape(next_state, [1, num_states])
             agent.remember((state, action, reward, next_state, done))
             state = next_state
@@ -117,15 +116,12 @@ if __name__ == "__main__":
             if done:
                 break
         slope = calculate_slope(prev_scores)
-        print("episode: %i/%i -> %i, slope: %f, epsilon: %f" % (e, max_episodes, score, slope, agent.epsilon))
+        print("episode: %i/%i -> %i,\t slope: %f, epsilon: %f" % (episode, MAX_EPISODES, score, slope, agent.epsilon))
         with open('data.csv', 'a') as csv_file:
-            csv_file.write("%i, %i, %f, %f\n" % (e, score, slope, agent.epsilon))
+            csv_file.write("%i, %i, %f, %f\n" % (MAX_EPISODES, score, slope, agent.epsilon))
 
-        agent.replay(32)
+        agent.replay(32, episode)
         prev_scores.append(score)
-        if e % 100 == 0:
+        if episode % 100 == 0:
             print("checkpoint")
             agent.model.save('bipedal.h5')
-
-
-

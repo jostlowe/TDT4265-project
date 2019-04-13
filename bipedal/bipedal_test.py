@@ -1,13 +1,13 @@
 import gym
 
 from keras import models
-from cartpole.cartpole import DQNAgent
+from bipedal import DQNAgent
 
 import numpy as np
 
-cartpole = gym.make('BipedalWalker-v2')
-num_states = cartpole.observation_space.shape[0]
-num_actions = cartpole.action_space.shape[0]
+bipedal = gym.make('BipedalWalker-v2')
+num_states = bipedal.observation_space.shape[0]
+num_actions = bipedal.action_space.shape[0]
 
 agent = DQNAgent(num_states, num_actions)
 agent.model = models.load_model('bipedal.h5')
@@ -29,13 +29,13 @@ def calculate_action(action_number):
 
 while True:
     done = False
-    state = cartpole.reset()
+    state = bipedal.reset()
     state = np.reshape(state, [1, num_states])
-    cartpole.render()
+    bipedal.render()
     while not done:
         action_number = agent.act(state)
         action = calculate_action(action_number)
-        state, reward, done, info = cartpole.step(action)
+        state, reward, done, info = bipedal.step(action)
         state = np.reshape(state, [1, num_states])
-        cartpole.render()
+        bipedal.render()
         #time.sleep()
