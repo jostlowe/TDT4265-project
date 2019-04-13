@@ -6,7 +6,7 @@ import numpy as np
 from scipy.stats import linregress
 import time as timer
 
-MAX_EPISODES = 1000
+MAX_EPISODES = 100000
 
 class ReplayMemory:
     def __init__(self, capacity):
@@ -30,7 +30,7 @@ class DQNAgent:
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
         self.epsilon_decay = 1-5/MAX_EPISODES
-        self.learning_rate = 1/MAX_EPISODES
+        self.learning_rate = 0.001
         self.model = self._make_model()
 
 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
         state = np.reshape(state, [1, num_states])
         score = 0
 
-        for time in range(500):
+        for time in range(200):
             action_number = agent.act(state)
             action = calculate_action(action_number)
             next_state, reward, done, _ = bipedal.step(action)
@@ -115,10 +115,10 @@ if __name__ == "__main__":
             score += reward
             if done:
                 break
-        slope = calculate_slope(prev_scores)
-        print("episode: %i/%i -> %i  \t slope: %f\t epsilon: %f" % (episode, MAX_EPISODES, score, slope, agent.epsilon))
+        avg = np.average(prev_scores)
+        print("episode: %i/%i -> %i  \t avg: %f\t epsilon: %f" % (episode, MAX_EPISODES, score, avg, agent.epsilon))
         with open('data.csv', 'a') as csv_file:
-            csv_file.write("%i, %i, %f, %f\n" % (MAX_EPISODES, score, slope, agent.epsilon))
+            csv_file.write("%i, %i, %f, %f\n" % (MAX_EPISODES, score, avg, agent.epsilon))
 
         agent.replay(32, episode)
         prev_scores.append(score)
