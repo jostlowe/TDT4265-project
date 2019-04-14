@@ -9,6 +9,8 @@ import time as timer
 import matplotlib.pyplot as plt
 
 MAX_EPISODES = 10000
+EPISODES_WITH_CONSTANT_EXPLORATION = MAX_EPISODES/10
+EPISODES_WITH_CONSTANT_LEARNING = MAX_EPISODES/2
 
 class ReplayMemory:
     def __init__(self, capacity):
@@ -31,8 +33,10 @@ class DQNAgent:
         self.gamma = 0.95    # discount rate
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
-        self.epsilon_decay = 1-5/MAX_EPISODES
-        self.learning_rate = 1/MAX_EPISODES
+        self.epsilon_decay = (self.epsilon_min/self.epsilon)**((MAX_EPISODES-EPISODES_WITH_CONSTANT_EXPLORATION)**(-1))
+        self.learning_rate = 10**(-4)
+        self.learning_rate_min = 10**(-7)
+        self.learning_rate_decay = (self.learning_rate_min/self.learning_rate)**((MAX_EPISODES-EPISODES_WITH_CONSTANT_LEARNING)**(-1))
         self.model = self._make_model()
 
 
@@ -41,7 +45,7 @@ class DQNAgent:
         model.add(layers.Dense(50, input_dim=self.num_states, activation='relu'))
         model.add(layers.Dense(50, activation='relu'))
         model.add(layers.Dense(50, activation='relu')) #Added extra
-        model.add(layers.Dense(50, activation='relu')) #Added extra #2
+        #model.add(layers.Dense(50, activation='relu')) #Added extra #2
         model.add(layers.Dense(self.num_actions, activation='linear'))
         model.compile(loss='mse', optimizer=optimizers.Adam(lr=self.learning_rate))
         return model
@@ -68,8 +72,12 @@ class DQNAgent:
             target_f = self.model.predict(state.fetch())
             target_f[0][action] = target
             self.model.fit(state.fetch(), target_f, epochs=1, verbose=0)
-        if (self.epsilon > self.epsilon_min) and (episode > MAX_EPISODES//10):
+
+        if (self.epsilon > self.epsilon_min) and (episode > EPISODES_WITH_CONSTANT_EXPLORATION):
             self.epsilon *= self.epsilon_decay
+
+        if (self.learning_rate > self.learning_rate_min) and (episode > EPISODES_WITH_CONSTANT_LEARNING):
+            self.learning_rate *= self.learning_rate_decay
 
 
 class FrameMemory:
@@ -123,7 +131,7 @@ if __name__ == "__main__":
             score += reward
             agent.remember((prev_frame_memory, action, reward, deepcopy(frame_memory), done))
             if done:
-                print("episode: %i/%i, score = %f e=%f" % (episode, MAX_EPISODES, score, agent.epsilon), end=' \t')
+                print("episode: %i/%i, score = %f\t learning = %f\t e = %f\t" % (episode, MAX_EPISODES, score, agent.learning_rate, agent.epsilon), end=' \t')
                 break
         agent.replay(32, episode)
         prev_scores.append(score)
