@@ -7,7 +7,27 @@ from scipy.stats import linregress
 from copy import deepcopy
 import time as timer
 
-MAX_EPISODES = 1000
+MAX_EPISODES = 10000
+
+#Chose modes
+#Choose vetween 'linear', 'step', 'exponential', or 'exponential-step' (only for learning)
+EPSILON_DECAY_MODE = 'exponential'
+LEARNING_RATE_DECAY_MODE = 'exponential'
+
+#Constants for linear decay
+EPSILON_LINEAR_START = MAX_EPISODES/10
+LEARNING_RATE_LINEAR_START = MAX_EPISODES/2
+
+#Constants for step-wise decay
+EPSILON_STEP_INTERVALS = 10
+LEARNING_RATE_STEP_INTERVALS = 10
+
+#Constants for exponential decay
+EPSILON_EXP_START = MAX_EPISODES/10
+LEARNING_RATE_EXP_START = 8*MAX_EPISODES/10
+
+#Constants for step-wise exponential decay (uses LEARNING_STEP_INTERVALS)
+LEARNING_RATE_STEP_EXP_START = 1/3
 
 class ReplayMemory:
     def __init__(self, capacity):
@@ -27,11 +47,25 @@ class DQNAgent:
         self.num_states = num_states
         self.num_actions = num_actions
         self.memory = ReplayMemory(capacity=500)
-        self.gamma = 0.98    # discount rate
-        self.epsilon = 1.0  # exploration rate
-        self.epsilon_min = 0.01
-        self.epsilon_decay = 1-5/MAX_EPISODES
-        self.learning_rate = 1/MAX_EPISODES
+        #discount rate
+        self.gamma = 0.98
+        #exploration rate
+        self.epsilon_max = 1.0
+        self.epsilon_min = 0.001
+        self.epsilon = self.epsilon_max
+        self.epsilon_linear_decay = (self.epsilon_min-self.epsilon_max)/(MAX_EPISODES-EPSILON_LINEAR_START)
+        self.epsilon_step_decay = self.epsilon_max/EPSILON_STEP_INTERVALS
+        self.epsilon_exp_decay = (self.epsilon_min/self.epsilon_max)**((MAX_EPISODES-EPSILON_EXP_START)**(-1))
+        #Learning rate
+        self.learning_rate_max = 10**(-4)
+        self.learning_rate_min = 10**(-6)
+        self.learning_rate = self.learning_rate_max
+        self.learning_rate_linear_decay = (self.learning_rate_min-self.learning_rate_max)/(MAX_EPISODES-LEARNING_RATE_LINEAR_START)
+        self.learning_rate_step_decay = self.learning_rate_max/LEARNING_RATE_STEP_INTERVALS
+        self.learning_rate_exp_decay = (self.learning_rate_min/self.learning_rate)**((MAX_EPISODES-LEARNING_RATE_EXP_START)**(-1))
+        self.learning_rate_step_exp_decay = (self.learning_rate_min/self.learning_rate)**((MAX_EPISODES-(MAX_EPISODES/LEARNING_RATE_STEP_INTERVALS*LEARNING_RATE_STEP_EXP_START))**(-1))
+        self.learning_rate_update = False
+
         self.model = self._make_model()
 
 
@@ -65,8 +99,40 @@ class DQNAgent:
             target_f = self.model.predict(frame_memory.fetch())
             target_f[0][action] = target
             self.model.fit(frame_memory.fetch(), target_f, epochs=1, verbose=0)
-        if (self.epsilon > self.epsilon_min) and (episode > MAX_EPISODES//10):
-            self.epsilon *= self.epsilon_decay
+
+        if (EPSILON_DECAY_MODE == 'linear'):
+            if (episode > EPSILON_LINEAR_START):
+                self.epsilon += self.epsilon_linear_decay
+
+        if (EPSILON_DECAY_MODE == 'step') and (episode > 0):
+            if (episode % (MAX_EPISODES/EPSILON_STEP_INTERVALS) == 0):
+                self.epsilon -= self.epsilon_step_decay
+
+        if (EPSILON_DECAY_MODE == 'exponential'):
+            if (episode > EPSILON_EXP_START):
+                self.epsilon *= self.epsilon_exp_decay
+
+        if (LEARNING_RATE_DECAY_MODE == 'linear'):
+            if (episode > LEARNING_RATE_LINEAR_START):
+                self.learning_rate += self.learning_rate_linear_decay
+
+        if (LEARNING_RATE_DECAY_MODE == 'step') and (episode > 0):
+            if (episode % (MAX_EPISODES/LEARNING_RATE_STEP_INTERVALS) == 0):
+                self.learning_rate -= self.learning_rate_step_decay
+
+        if (LEARNING_RATE_DECAY_MODE == 'exponential'):
+            if (episode > LEARNING_RATE_EXP_START):
+                self.learning_rate *= self.learning_rate_exp_decay
+
+        if (LEARNING_RATE_DECAY_MODE == 'step-exponential'):
+            if (episode % (MAX_EPISODES/LEARNING_RATE_STEP_INTERVALS) == 0) and (episode > 0):
+                self.learning_rate = self.learning_rate_max
+                self.learning_rate_update = False
+
+            if (episode % (MAX_EPISODES/LEARNING_RATE_STEP_INTERVALS) > MAX_EPISODES/LEARNING_RATE_STEP_INTERVALS*LEARNING_RATE_STEP_EXP_START) or (self.learning_rate_update == True):
+                print("ding")
+                self.learning_rate_update = True
+                self.learning_rate *= self.learning_rate_step_exp_decay
 
 
 def calculate_action(action_number):

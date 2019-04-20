@@ -1,7 +1,7 @@
 import gym
 
 from keras import models
-from bipedal_with_memory import DQNAgent
+from bipedal import DQNAgent
 from collections import deque
 
 import numpy as np
