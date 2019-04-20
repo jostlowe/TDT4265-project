@@ -8,6 +8,27 @@ import time as timer
 
 MAX_EPISODES = 100000
 
+#Chose modes
+#Choose vetween 'linear', 'step', 'exponential', or 'exponential-step' (only for learning)
+EPSILON_DECAY_MODE = 'exponential'
+LEARNING_RATE_DECAY_MODE = 'exponential'
+
+#Constants for linear decay
+EPSILON_LINEAR_START = MAX_EPISODES/10
+LEARNING_RATE_LINEAR_START = MAX_EPISODES/2
+
+#Constants for step-wise decay
+EPSILON_STEP_INTERVALS = 10
+LEARNING_RATE_STEP_INTERVALS = 10
+
+#Constants for exponential decay
+EPSILON_EXP_START = MAX_EPISODES/10
+LEARNING_RATE_EXP_START = 8*MAX_EPISODES/10
+
+#Constants for step-wise exponential decay (uses LEARNING_STEP_INTERVALS)
+LEARNING_RATE_STEP_EXP_START = 1/3
+
+
 class ReplayMemory:
     def __init__(self, capacity):
         self.capacity = capacity
