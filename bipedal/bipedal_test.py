@@ -10,7 +10,7 @@ num_states = bipedal.observation_space.shape[0]
 num_actions = bipedal.action_space.shape[0]
 
 agent = DQNAgent(num_states, num_actions)
-agent.model = models.load_model('bipedal.h5')
+agent.model = models.load_model('bipedal_spaghoot.h5')
 agent.epsilon = agent.epsilon_min
 
 def calculate_action(action_number):

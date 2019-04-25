@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a1d6f0a-2efb-478a-b5af-aed5244ed463" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bipedal/bipedal.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bipedal/bipedal_test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bipedal_with_full_action/bipedal.h5" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bipedal_with_full_action/bipedal.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bipedal_with_full_action/bipedal_test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bipedal_with_full_action/map.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bipedal_with_memory/bipedal_with_memory.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bipedal_with_memory/bipedal_with_memory_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/project.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cartpole.h5" beforeDir="false" afterPath="$PROJECT_DIR$/cartpole/cartpole.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cartpole.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartpole/cartpole.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cartpole_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/cartpole/cartpole_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bipedal/bipedal_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/bipedal/bipedal_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,28 +11,29 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ElmWorkspace">
+    <elmProjects />
+    <settings elmCompilerPath="" elmFormatPath="" elmTestPath="" isElmFormatOnSaveEnabled="false" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bipedal_with_full_action/bipedal.py">
+        <entry file="file://$PROJECT_DIR$/bipedal_with_full_action/bipedal_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+            <state relative-caret-position="705">
+              <caret line="53" column="23" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#0#10#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/bipedal_with_full_action/bipedal_test.py">
+        <entry file="file://$PROJECT_DIR$/bipedal/bipedal_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="33" lean-forward="true" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="185">
+              <caret line="20" column="20" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -75,10 +64,12 @@
         <option value="$PROJECT_DIR$/bipedal_with_memory/bipedal_with_memory.py" />
         <option value="$PROJECT_DIR$/bipedal_with_full_action/bipedal_test.py" />
         <option value="$PROJECT_DIR$/bipedal_with_full_action/bipedal.py" />
+        <option value="$PROJECT_DIR$/bipedal/bipedal_test.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-4" />
     <option name="width" value="964" />
     <option name="height" value="1046" />
   </component>
@@ -87,7 +78,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -98,12 +88,13 @@
             <path>
               <item name="project" type="b2602c69:ProjectViewProjectNode" />
               <item name="project" type="462c0819:PsiDirectoryNode" />
-              <item name="bipedal_with_full_action" type="462c0819:PsiDirectoryNode" />
+              <item name="bipedal" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -112,7 +103,7 @@
     <property name="last_opened_file_path" value="$USER_HOME$/progging/regiweb" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -136,7 +127,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.bipedal_test">
+  <component name="RunManager" selected="Python.bipedal_test (1)">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -163,6 +154,9 @@
       <module name="project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bipedal_with_full_action" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -178,10 +172,35 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="bipedal_test (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bipedal" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bipedal/bipedal_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="bipedal_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bipedal_with_full_action" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -197,29 +216,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="bipedal_with_memory_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="project" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bipedal_with_memory/bipedal_with_memory_test.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="true" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="cartpole_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cartpole" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -239,6 +242,9 @@
       <module name="project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/bipedal_with_full_action" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -256,11 +262,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.bipedal_test (1)" />
         <item itemvalue="Python.bipedal_test" />
         <item itemvalue="Python.bipedal (1)" />
         <item itemvalue="Python.map" />
         <item itemvalue="Python.cartpole_test" />
-        <item itemvalue="Python.bipedal_with_memory_test" />
       </list>
     </recent_temporary>
   </component>
@@ -282,11 +288,15 @@
       <workItem from="1554802160622" duration="71000" />
       <workItem from="1554834405526" duration="38000" />
       <workItem from="1554972376977" duration="3295000" />
+      <workItem from="1555152288449" duration="699000" />
+      <workItem from="1555185585280" duration="69000" />
+      <workItem from="1555272272667" duration="954000" />
+      <workItem from="1555353630179" duration="8000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24931000" />
+    <option name="totallyTimeSpent" value="26661000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -298,10 +308,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="964" height="1046" extended-state="4" />
-    <editor active="true" />
+    <frame x="0" y="0" width="964" height="1046" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26373628" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2868132" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -314,15 +323,17 @@
       <window_info anchor="bottom" id="TODO" order="7" show_stripe_button="false" weight="0.32932165" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.7131868" side_tool="true" weight="0.32897604" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.7076923" side_tool="true" weight="0.3278867" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.32897604" />
-      <window_info active="true" anchor="bottom" id="Python Console" order="12" sideWeight="0.2868132" visible="true" weight="0.3278867" />
+      <window_info active="true" anchor="bottom" id="Python Console" order="12" sideWeight="0.2923077" visible="true" weight="0.32822758" />
+      <window_info anchor="bottom" id="Elm Compiler" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
       <window_info anchor="right" x="0" y="0" width="191" height="850" id="Documentation" order="5" side_tool="true" weight="0.32967034" />
+      <window_info anchor="right" id="Elm" order="6" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -372,13 +383,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bipedal/bipedal_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bipedal_with_memory/bipedal_with_memory_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -412,8 +416,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bipedal_with_full_action/bipedal.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="41" column="34" selection-start-line="41" selection-start-column="34" selection-end-line="41" selection-end-column="34" />
+        <state relative-caret-position="420">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -422,11 +426,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bipedal_with_full_action/bipedal_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="33" lean-forward="true" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
+        <state relative-caret-position="705">
+          <caret line="53" column="23" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bipedal/bipedal_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="20" column="20" selection-start-line="20" selection-start-column="20" selection-end-line="20" selection-end-column="20" />
         </state>
       </provider>
     </entry>

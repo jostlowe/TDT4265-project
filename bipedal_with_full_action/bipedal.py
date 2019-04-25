@@ -12,8 +12,8 @@ MAX_EPISODES = 10000
 
 #Chose modes
 #Choose vetween 'linear', 'step', 'exponential', or 'exponential-step' (only for learning)
-EPSILON_DECAY_MODE = 'exponential'
-LEARNING_RATE_DECAY_MODE = 'exponential'
+EPSILON_DECAY_MODE = 'step'
+LEARNING_RATE_DECAY_MODE = 'step-exponential'
 
 #Constants for linear decay
 EPSILON_LINEAR_START = MAX_EPISODES/10
