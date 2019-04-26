@@ -42,7 +42,7 @@ class ExplorationRate:
         steps = 10
 
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
-            decay = (self.min - self.max)/(steps)
+            decay = -(self.min + self.max)/(steps)
             self.epsilon += decay
 
         return self.epsilon
@@ -91,7 +91,7 @@ class LearningRate:
         steps = 10
 
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
-            decay = (self.min-self.max)/steps
+            decay = -(self.min+self.max)/steps
             self.alpha += decay
 
         return self.alpha
@@ -180,9 +180,9 @@ class DQNAgent:
             target_f[0][action] = target
             self.model.fit(state, target_f, epochs=1, verbose=0)
 
-    self.epsilon = self.exploration_rate.decay(episode)
+        self.epsilon = self.exploration_rate.decay(episode)
 
-    self.alpha = self.learning_rate.decay(episode)
+        self.alpha = self.learning_rate.decay(episode)
 
 def calculate_action(action_number):
     themap = {

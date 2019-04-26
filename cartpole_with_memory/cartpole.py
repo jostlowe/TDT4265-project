@@ -8,12 +8,12 @@ import time as timer
 
 import matplotlib.pyplot as plt
 
-MAX_EPISODES = 10000
+MAX_EPISODES = 100
 
 class ExplorationRate:
     def __init__(self):
         self.max = 1.0
-        self.min = 0.001
+        self.min = 0.01
         self.epsilon = self.max
         # Choose between 'none' 'linear', 'steps' and 'exponential'
         self.decay_mode = 'steps'
@@ -44,7 +44,8 @@ class ExplorationRate:
         steps = 10
 
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
-            decay = (self.min - self.max)/(steps)
+            decay = -(self.min + self.max)/(steps)
+            print(decay)
             self.epsilon += decay
 
         return self.epsilon
@@ -93,7 +94,7 @@ class LearningRate:
         steps = 10
 
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
-            decay = (self.min-self.max)/steps
+            decay = -(self.min+self.max)/steps
             self.alpha += decay
 
         return self.alpha
