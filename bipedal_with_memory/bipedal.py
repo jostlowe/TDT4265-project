@@ -232,7 +232,7 @@ if __name__ == "__main__":
     num_states = bipedal.observation_space.shape[0]
     num_actions = bipedal.action_space.shape[0]
     num_frames = 3
-    LOAD = True
+    LOAD = False
 
     frame_memory = FrameMemory(length=num_frames)
     agent = DQNAgent(num_states=num_states*num_frames, num_actions=8)
