@@ -45,7 +45,7 @@ class ExplorationRate:
 
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
             decay = -(self.min + self.max)/(steps)
-            print(decay)
+            
             self.epsilon += decay
 
         return self.epsilon
