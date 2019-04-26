@@ -64,7 +64,7 @@ class LearningRate:
         self.min = 10**(-6)
         self.alpha = self.max
         # Choose between 'none' 'linear', 'steps', 'exponential' and 'step-exponential'
-        self.decay_mode = 'step-exponential'
+        self.decay_mode = 'none'
         self.decay_functions = {
             'none' : self.no_decay,
             'linear' : self.linear_decay,
