@@ -260,7 +260,7 @@ if __name__ == "__main__":
         with open('data.csv', 'a') as csv_file:
             csv_file.write("%i, %i, %f, %f\n" % (episode, score, slope, agent.epsilon))
 
-        agent.replay(8, episode)
+        agent.replay(32, episode)
 
         if episode % 100 == 0:
             print("checkpoint")
