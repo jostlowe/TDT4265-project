@@ -1,4 +1,4 @@
-import gym
+import gym_local as gym
 
 from keras import models
 from bipedal import DQNAgent

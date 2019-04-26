@@ -1,13 +1,14 @@
-import gym, random
+import random
 from collections import deque, namedtuple
 
 from keras import  models, layers, optimizers
 import numpy as np
 from scipy.stats import linregress
 from copy import deepcopy
-import time as timer
 
-MAX_EPISODES = 10000
+import gym_local as gym
+
+MAX_EPISODES = 250000
 
 class ExplorationRate:
     def __init__(self):
@@ -137,7 +138,7 @@ class DQNAgent:
     def __init__(self, num_states, num_actions):
         self.num_states = num_states
         self.num_actions = num_actions
-        self.memory = ReplayMemory(capacity=500)
+        self.memory = ReplayMemory(capacity=MAX_EPISODES//50)
         #discount rate
         self.gamma = 0.98
         #exploration rate
@@ -230,7 +231,7 @@ if __name__ == "__main__":
     bipedal = gym.make('BipedalWalker-v2')
     num_states = bipedal.observation_space.shape[0]
     num_actions = bipedal.action_space.shape[0]
-    num_frames = 10
+    num_frames = 3
     LOAD = True
 
     frame_memory = FrameMemory(length=num_frames)
