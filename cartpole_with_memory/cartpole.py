@@ -33,27 +33,27 @@ class ExplorationRate:
 
     def linear_decay(self, episode):
         start = MAX_EPISODES/10
-        decay = (self.min-self.max)/(MAX_EPISODES - start)
 
         if (episode > start):
+            decay = (self.min-self.max)/(MAX_EPISODES - start)
             self.epsilon += decay
 
         return self.epsilon
 
     def step_decay(self, episode):
         steps = 10
-        decay = (self.min - self.max)/(steps)
 
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
+            decay = (self.min - self.max)/(steps)
             self.epsilon += decay
 
         return self.epsilon
 
     def exp_decay(self, episode):
         start = MAX_EPISODES/10
-        decay = (self.min/self.max)**((MAX_EPISODES-start)**(-1))
 
         if (episode > start):
+            decay = (self.min/self.max)**((MAX_EPISODES-start)**(-1))
             self.epsilon *= decay
 
         return self.epsilon
@@ -63,7 +63,7 @@ class LearningRate:
         self.max = 10**(-4)
         self.min = 10**(-6)
         self.alpha = self.max
-        # Choose between 'none' 'linear', 'steps' and 'exponential'
+        # Choose between 'none' 'linear', 'steps', 'exponential' and 'step-exponential'
         self.decay_mode = 'step-exponential'
         self.decay_functions = {
             'none' : self.no_decay,
@@ -82,27 +82,27 @@ class LearningRate:
 
     def linear_decay(self, episode):
         start = MAX_EPISODES/2
-        decay = (self.min-self.max)/(MAX_EPISODES-start)
 
         if (episode > start):
-                self.alpha += decay
+            decay = (self.min-self.max)/(MAX_EPISODES-start)
+            self.alpha += decay
 
         return self.alpha
 
     def step_decay(self, episode):
         steps = 10
-        decay = (self.min-self.max)/steps
 
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
+            decay = (self.min-self.max)/steps
             self.alpha += decay
 
         return self.alpha
 
     def exp_decay(self, episode):
         start = 8*MAX_EPISODES/10
-        decay = (self.min/self.max)**((MAX_EPISODES-start)**(-1))
 
         if (episode > start):
+            decay = (self.min/self.max)**((MAX_EPISODES-start)**(-1))
             self.alpha *= decay
 
         return self.alpha
@@ -110,14 +110,11 @@ class LearningRate:
     def step_exp_decay(self, episode):
         steps = 10
         start = 1/3 #Starting point of exponential decay in each step
-        update = False
 
         if (episode % (MAX_EPISODES//steps) == 0):
             self.alpha = self.max
-            self.update = False
 
-        if (episode % (MAX_EPISODES//steps) > MAX_EPISODES//steps*start) or (update == True):
-            update = True
+        if (episode % (MAX_EPISODES//steps) > MAX_EPISODES//steps*start):
             decay = (self.min/self.max)**((MAX_EPISODES-(MAX_EPISODES/steps*start))**(-1))
             self.alpha *= decay
 
