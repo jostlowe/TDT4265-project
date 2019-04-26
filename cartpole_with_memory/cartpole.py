@@ -8,7 +8,7 @@ import time as timer
 
 import matplotlib.pyplot as plt
 
-MAX_EPISODES = 10000
+MAX_EPISODES = 15000
 
 class ExplorationRate:
     def __init__(self):

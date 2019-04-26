@@ -439,7 +439,7 @@ class BipedalWalker(gym.Env, EzPickle):
 
         done = False
         if self.game_over or pos[0] < 0:
-            reward = -100
+            reward = -10
             done   = True
         if pos[0] > (TERRAIN_LENGTH-TERRAIN_GRASS)*TERRAIN_STEP:
             done   = True
