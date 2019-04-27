@@ -6,7 +6,8 @@ import numpy as np
 from scipy.stats import linregress
 from copy import deepcopy
 
-import gym_local as gym
+import gym
+#from gym_local.envs.box2d import bipedal_walker
 
 MAX_EPISODES = 250000
 
@@ -249,6 +250,10 @@ if __name__ == "__main__":
             action = calculate_action(action_number)
             prev_frame_memory = deepcopy(frame_memory)
             next_state, reward, done, _ = bipedal.step(action)
+
+            if (reward == -100):
+                reward = -10
+
             frame_memory.remember(next_state)
             agent.remember((prev_frame_memory, action, reward, deepcopy(frame_memory), done))
             score += reward
@@ -256,7 +261,7 @@ if __name__ == "__main__":
                 break
         prev_scores.append(score)
         slope = calculate_slope(prev_scores)
-        print("episode: %i/%i -> %i  \t slope: %f\t epsilon: %f" % (episode, MAX_EPISODES, score, slope, agent.epsilon))
+        #print("episode: %i/%i -> %i  \t slope: %f\t epsilon: %f" % (episode, MAX_EPISODES, score, slope, agent.epsilon))
         with open('data.csv', 'a') as csv_file:
             csv_file.write("%i, %i, %f, %f\n" % (episode, score, slope, agent.epsilon))
 
