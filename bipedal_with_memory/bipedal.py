@@ -251,8 +251,7 @@ if __name__ == "__main__":
             prev_frame_memory = deepcopy(frame_memory)
             next_state, reward, done, _ = bipedal.step(action)
 
-            if (reward == -100):
-                reward = -50
+            reward -= abs(0.5*(next_state[4]+next_state[6]+next_state[9]+next_state[11]))
 
             frame_memory.remember(next_state)
             agent.remember((prev_frame_memory, action, reward, deepcopy(frame_memory), done))
