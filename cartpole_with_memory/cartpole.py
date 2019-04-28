@@ -33,30 +33,23 @@ class ExplorationRate:
 
     def linear_decay(self, episode):
         start = MAX_EPISODES/10
-
         if (episode > start):
             decay = (self.min-self.max)/(MAX_EPISODES - start)
             self.epsilon += decay
-
         return self.epsilon
 
     def step_decay(self, episode):
         steps = 10
-
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
             decay = -(self.min + self.max)/(steps)
-
             self.epsilon += decay
-
         return self.epsilon
 
     def exp_decay(self, episode):
         start = MAX_EPISODES/10
-
         if (episode > start):
             decay = (self.min/self.max)**((MAX_EPISODES-start)**(-1))
             self.epsilon *= decay
-
         return self.epsilon
 
 class LearningRate:
@@ -83,35 +76,28 @@ class LearningRate:
 
     def linear_decay(self, episode):
         start = MAX_EPISODES/2
-
         if (episode > start):
             decay = (self.min-self.max)/(MAX_EPISODES-start)
             self.alpha += decay
-
         return self.alpha
 
     def step_decay(self, episode):
         steps = 10
-
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
             decay = -(self.min+self.max)/steps
             self.alpha += decay
-
         return self.alpha
 
     def exp_decay(self, episode):
         start = 8*MAX_EPISODES/10
-
         if (episode > start):
             decay = (self.min/self.max)**((MAX_EPISODES-start)**(-1))
             self.alpha *= decay
-
         return self.alpha
 
     def step_exp_decay(self, episode):
         steps = 10
         start = 1/3 #Starting point of exponential decay in each step
-
         if (episode % (MAX_EPISODES//steps) == 0):
             self.alpha = self.max
 
@@ -140,12 +126,12 @@ class DQNAgent:
         self.num_states = num_states
         self.num_actions = num_actions
         self.memory = ReplayMemory(capacity=MAX_EPISODES//50)
-        #discount rate
+        # Discount rate
         self.gamma = 0.95
-        #exploration rate
+        # Exploration rate
         self.exploration_rate = ExplorationRate()
         self.epsilon = self.exploration_rate.get()
-        #Learning rate
+        # Learning rate
         self.learning_rate = LearningRate()
         self.alpha = self.learning_rate.get()
 
@@ -155,8 +141,7 @@ class DQNAgent:
         model = models.Sequential()
         model.add(layers.Dense(50, input_dim=self.num_states, activation='relu'))
         model.add(layers.Dense(50, activation='relu'))
-        model.add(layers.Dense(50, activation='relu')) #Added extra
-        #model.add(layers.Dense(50, activation='relu')) #Added extra #2
+        model.add(layers.Dense(50, activation='relu'))
         model.add(layers.Dense(self.num_actions, activation='linear'))
         model.compile(loss='mse', optimizer=optimizers.Adam(lr=self.alpha))
         return model
@@ -165,12 +150,11 @@ class DQNAgent:
         self.memory.push(transition)
 
     def act(self, state):
-        if np.random.rand() <= self.epsilon:
-            # return random action
+        # Either chooses a random action or the optimal action
+        if (np.random.rand() <= self.epsilon):
             return random.randrange(self.num_actions)
         else:
             prediction = self.model.predict(state)
-            # returns action with highest q-value
             return np.argmax(prediction[0])
 
     def replay(self, batch_size, episode):
@@ -256,8 +240,5 @@ if __name__ == "__main__":
 
     plt.plot(scores, 'r', averages, 'b')
     plt.show()
-    plt.plot(learnigrates)
-    plt.show()
-    plt.plot(explorationrates)
-    plt.show()
+
     agent.model.save('cartpole.h5')

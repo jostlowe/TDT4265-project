@@ -33,7 +33,7 @@ num_frames = 3
 agent = DQNAgent(num_states=num_states*num_frames, num_actions=num_actions)
 frame_memory = FrameMemory(length=num_frames)
 agent.model = models.load_model('cartpole.h5')
-agent.epsilon = agent.epsilon_min
+agent.epsilon = 0.0
 
 
 while True:

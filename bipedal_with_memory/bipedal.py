@@ -6,9 +6,6 @@ import numpy as np
 from scipy.stats import linregress
 from copy import deepcopy
 
-import gym
-#from gym_local.envs.box2d import bipedal_walker
-
 MAX_EPISODES = 250000
 
 class ExplorationRate:
@@ -34,29 +31,23 @@ class ExplorationRate:
 
     def linear_decay(self, episode):
         start = MAX_EPISODES/10
-
         if (episode > start):
             decay = (self.min-self.max)/(MAX_EPISODES - start)
             self.epsilon += decay
-
         return self.epsilon
 
     def step_decay(self, episode):
         steps = 10
-
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
             decay = -(self.min + self.max)/(steps)
             self.epsilon += decay
-
         return self.epsilon
 
     def exp_decay(self, episode):
         start = MAX_EPISODES/10
-
         if (episode > start):
             decay = (self.min/self.max)**((MAX_EPISODES-start)**(-1))
             self.epsilon *= decay
-
         return self.epsilon
 
 class LearningRate:
@@ -83,35 +74,28 @@ class LearningRate:
 
     def linear_decay(self, episode):
         start = MAX_EPISODES/2
-
         if (episode > start):
             decay = (self.min-self.max)/(MAX_EPISODES-start)
             self.alpha += decay
-
         return self.alpha
 
     def step_decay(self, episode):
         steps = 10
-
         if (episode > 0) and (episode % (MAX_EPISODES//steps) == 0):
             decay = -(self.min+self.max)/steps
             self.alpha += decay
-
         return self.alpha
 
     def exp_decay(self, episode):
         start = 8*MAX_EPISODES/10
-
         if (episode > start):
             decay = (self.min/self.max)**((MAX_EPISODES-start)**(-1))
             self.alpha *= decay
-
         return self.alpha
 
     def step_exp_decay(self, episode):
         steps = 10
         start = 1/3 #Starting point of exponential decay in each step
-
         if (episode % (MAX_EPISODES//steps) == 0):
             self.alpha = self.max
 
@@ -140,12 +124,12 @@ class DQNAgent:
         self.num_states = num_states
         self.num_actions = num_actions
         self.memory = ReplayMemory(capacity=MAX_EPISODES//50)
-        #discount rate
+        # Discount rate
         self.gamma = 0.98
-        #exploration rate
+        # Exploration rate
         self.exploration_rate = ExplorationRate()
         self.epsilon = self.exploration_rate.get()
-        #Learning rate
+        # Learning rate
         self.learning_rate = LearningRate()
         self.alpha = self.learning_rate.get()
 
@@ -164,12 +148,11 @@ class DQNAgent:
         self.memory.push(transition)
 
     def act(self, state):
+        # Either chooses a random action or the optimal action
         if np.random.rand() <= self.epsilon:
-            # return random action
             return random.randrange(self.num_actions)
         else:
             prediction = self.model.predict(state)
-            # returns action with highest q-value
             return np.argmax(prediction)
 
     def replay(self, batch_size, episode):
@@ -233,6 +216,7 @@ if __name__ == "__main__":
     num_states = bipedal.observation_space.shape[0]
     num_actions = bipedal.action_space.shape[0]
     num_frames = 3
+    # Should the weihgts from last time be imported in initialization?
     LOAD = False
 
     frame_memory = FrameMemory(length=num_frames)
@@ -251,7 +235,9 @@ if __name__ == "__main__":
             prev_frame_memory = deepcopy(frame_memory)
             next_state, reward, done, _ = bipedal.step(action)
 
-            reward -= abs(0.5*(next_state[4]+next_state[6]+next_state[9]+next_state[11]))
+            ###
+            # If reward is to be modified, do so here
+            ###
 
             frame_memory.remember(next_state)
             agent.remember((prev_frame_memory, action, reward, deepcopy(frame_memory), done))

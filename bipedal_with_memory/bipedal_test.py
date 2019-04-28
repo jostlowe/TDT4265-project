@@ -10,9 +10,9 @@ bipedal = gym.make('BipedalWalker-v2')
 num_states = bipedal.observation_space.shape[0]
 num_actions = bipedal.action_space.shape[0]
 
-agent = DQNAgent(num_states*10, num_actions)
+agent = DQNAgent(num_states*3, num_actions)
 agent.model = models.load_model('bipedal.h5')
-agent.epsilon = agent.epsilon_min
+agent.epsilon = 0.0
 
 def calculate_action(action_number):
     themap = {
@@ -44,7 +44,7 @@ class FrameMemory:
         return np.reshape(list(self.queue), [1, len(self.queue[0])*self.length])
 
 
-frame_memory = FrameMemory(10)
+frame_memory = FrameMemory(3)
 
 while True:
     done = False
