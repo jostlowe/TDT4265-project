@@ -252,7 +252,7 @@ if __name__ == "__main__":
             next_state, reward, done, _ = bipedal.step(action)
 
             if (reward == -100):
-                reward = -10
+                reward = -50
 
             frame_memory.remember(next_state)
             agent.remember((prev_frame_memory, action, reward, deepcopy(frame_memory), done))
